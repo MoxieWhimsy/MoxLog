@@ -5,26 +5,26 @@
 
 using System.Collections.Generic;
 using UnityEngine;
-using LogCategory = LogCat;
+using Category = LogCat;
 
 public class Log
 {
     static Log Instance { get; } = new Log();
 
-    static HashSet<LogCategory> active;
-    static HashSet<LogCategory> hidden;
+    static HashSet<Category> active;
+    static HashSet<Category> hidden;
 
     static Log() { }
     private Log() 
     {
-        active = new HashSet<LogCategory> { 
-            LogCategory.Debug 
+        active = new HashSet<Category> { 
+            Category.Debug 
         };
-        hidden = new HashSet<LogCategory>();
+        hidden = new HashSet<Category>();
     }
 
 
-    public static bool CatHide(LogCategory category)
+    public static bool Hide(Category category)
     {
         if (active.Contains(category))
         {
@@ -40,7 +40,7 @@ public class Log
         return hidden.Contains(category);
     }
 
-    public static bool CatShow(LogCategory category)
+    public static bool Show(Category category)
     {
         if (hidden.Contains(category))
         {
@@ -72,11 +72,9 @@ public class Log
         }
     }
 
-    public static bool Info(LogCategory category, object message, params object[] args)
+    public static bool Info(Category category, object message, params object[] args)
     {
-#if RELEASE_BUILD
-        return false;
-#endif
+#if !RELEASE_BUILD
         // Info is opt-in
         if (!active.Contains(category))
         {
@@ -95,14 +93,15 @@ public class Log
             return true;
         }
 
+#endif
         return false;
     }
 
-    public static void Warning(LogCategory category, object message, params object[] args)
+    public static void Warning(Category category, object message, params object[] args)
     {
 #if RELEASE_BUILD
         return;
-#endif
+#else
         // Warnings are opt-out
         if (hidden.Contains(category))
         {
@@ -120,6 +119,7 @@ public class Log
             Debug.LogWarningFormat(message as string, args);
             return;
         }
+#endif
     }
 
     /// <summary>
@@ -132,7 +132,7 @@ public class Log
     {
 #if RELEASE_BUILD
         return false;
-#endif
+#else
         if (args.Length <= 0)
         {
             Debug.Log(message);
@@ -144,5 +144,6 @@ public class Log
             Debug.LogFormat(message as string, args);
             return;
         }
+#endif
     }
 }

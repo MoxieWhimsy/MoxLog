@@ -1,0 +1,1 @@
+/*  * MoxLog Copyright (c) 2020 Paul Ping Kohler *  * Enum style class for log categories * Use partial to extend with project-specific log categories *  */public partial class LogCat{    public static LogCat Temp = new LogCat();    public static LogCat Debug = new LogCat();    public static LogCat UX = new LogCat();}

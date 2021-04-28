@@ -65,9 +65,9 @@ public class Log
             return;
         }
 
-        if (message is string)
+        if (message is string format)
         {
-            Debug.LogErrorFormat(message as string, args);
+            Debug.LogErrorFormat(format, args);
             return;
         }
     }
@@ -87,9 +87,9 @@ public class Log
             return true;
         }
 
-        if (message is string)
+        if (message is string format)
         {
-            Debug.LogFormat(message as string, args);
+            Debug.LogFormat(format, args);
             return true;
         }
 
@@ -114,9 +114,9 @@ public class Log
             return;
         }
 
-        if (message is string)
+        if (message is string format)
         {
-            Debug.LogWarningFormat(message as string, args);
+            Debug.LogWarningFormat(format, args);
             return;
         }
 #endif
@@ -139,9 +139,9 @@ public class Log
             return;
         }
 
-        if (message is string)
+        if (message is string format)
         {
-            Debug.LogFormat(message as string, args);
+            Debug.LogFormat(format, args);
             return;
         }
 #endif

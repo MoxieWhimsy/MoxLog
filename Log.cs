@@ -9,141 +9,141 @@ using Category = LogCat;
 
 public class Log
 {
-    static Log Instance { get; } = new Log();
+	static Log Instance { get; } = new Log();
 
-    static HashSet<Category> active;
-    static HashSet<Category> hidden;
+	static HashSet<Category> active;
+	static HashSet<Category> hidden;
 
-    static Log() { }
-    private Log() 
-    {
-        active = new HashSet<Category> { 
-            Category.Debug 
-        };
-        hidden = new HashSet<Category>();
-    }
+	static Log() { }
+	private Log() 
+	{
+		active = new HashSet<Category> { 
+			Category.Debug 
+		};
+		hidden = new HashSet<Category>();
+	}
 
 
-    public static bool Hide(Category category)
-    {
-        if (active.Contains(category))
-        {
-            active.Remove(category);
-        }
+	public static bool Hide(Category category)
+	{
+		if (active.Contains(category))
+		{
+			active.Remove(category);
+		}
 
-        if (hidden.Contains(category))
-        {
-            return true;
-        }
+		if (hidden.Contains(category))
+		{
+			return true;
+		}
 
-        hidden.Add(category);
-        return hidden.Contains(category);
-    }
+		hidden.Add(category);
+		return hidden.Contains(category);
+	}
 
-    public static bool Show(Category category)
-    {
-        if (hidden.Contains(category))
-        {
-            hidden.Remove(category);
-        }
+	public static bool Show(Category category)
+	{
+		if (hidden.Contains(category))
+		{
+			hidden.Remove(category);
+		}
 
-        if (active.Contains(category))
-        {
-            return true;
-        }
+		if (active.Contains(category))
+		{
+			return true;
+		}
 
-        active.Add(category);
+		active.Add(category);
         
-        return active.Contains(category);
-    }
+		return active.Contains(category);
+	}
 
-    public static void Error(object message, params object[] args)
-    {
-        if (args.Length <= 0)
-        {
-            Debug.LogError(message);
-            return;
-        }
+	public static void Error(object message, params object[] args)
+	{
+		if (args.Length <= 0)
+		{
+			Debug.LogError(message);
+			return;
+		}
 
-        if (message is string format)
-        {
-            Debug.LogErrorFormat(format, args);
-            return;
-        }
-    }
+		if (message is string format)
+		{
+			Debug.LogErrorFormat(format, args);
+			return;
+		}
+	}
 
-    public static bool Info(Category category, object message, params object[] args)
-    {
+	public static bool Info(Category category, object message, params object[] args)
+	{
 #if !RELEASE_BUILD
-        // Info is opt-in
-        if (!active.Contains(category))
-        {
-            return false;
-        }
+		// Info is opt-in
+		if (!active.Contains(category))
+		{
+			return false;
+		}
 
-        if (args.Length <= 0)
-        {
-            Debug.Log(message);
-            return true;
-        }
+		if (args.Length <= 0)
+		{
+			Debug.Log(message);
+			return true;
+		}
 
-        if (message is string format)
-        {
-            Debug.LogFormat(format, args);
-            return true;
-        }
+		if (message is string format)
+		{
+			Debug.LogFormat(format, args);
+			return true;
+		}
 
 #endif
-        return false;
-    }
+		return false;
+	}
 
-    public static void Warning(Category category, object message, params object[] args)
-    {
+	public static void Warning(Category category, object message, params object[] args)
+	{
 #if RELEASE_BUILD
         return;
 #else
-        // Warnings are opt-out
-        if (hidden.Contains(category))
-        {
-            return;
-        }
+		// Warnings are opt-out
+		if (hidden.Contains(category))
+		{
+			return;
+		}
 
-        if (args.Length <= 0)
-        {
-            Debug.LogWarning(message);
-            return;
-        }
+		if (args.Length <= 0)
+		{
+			Debug.LogWarning(message);
+			return;
+		}
 
-        if (message is string format)
-        {
-            Debug.LogWarningFormat(format, args);
-            return;
-        }
+		if (message is string format)
+		{
+			Debug.LogWarningFormat(format, args);
+			return;
+		}
 #endif
-    }
+	}
 
-    /// <summary>
-    /// For temporary output.
-    /// Please find all references and remove before moving on.
-    /// </summary>
-    /// <param name="message"></param>
-    /// <param name="args"></param>
-    public static void Temp(object message, params object[] args)
-    {
+	/// <summary>
+	/// For temporary output.
+	/// Please find all references and remove before moving on.
+	/// </summary>
+	/// <param name="message"></param>
+	/// <param name="args"></param>
+	public static void Temp(object message, params object[] args)
+	{
 #if RELEASE_BUILD
-        return false;
+        return;
 #else
-        if (args.Length <= 0)
-        {
-            Debug.Log(message);
-            return;
-        }
+		if (args.Length <= 0)
+		{
+			Debug.Log(message);
+			return;
+		}
 
-        if (message is string format)
-        {
-            Debug.LogFormat(format, args);
-            return;
-        }
+		if (message is string format)
+		{
+			Debug.LogFormat(format, args);
+			return;
+		}
 #endif
-    }
+	}
 }

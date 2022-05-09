@@ -127,18 +127,19 @@ public class Log
 	/// Please find all references and remove before moving on.
 	/// </summary>
 	/// <param name="message"></param>
+	/// <param name="context"></param>
 	/// <param name="args"></param>
-	public static void Temp(object message, params object[] args)
+	public static void Temp(object message, Object context = null, params object[] args)
 	{
 #if RELEASE_BUILD
         return;
 #else
 		if (args.Length <= 0)
 		{
-			Debug.Log(message);
+			Debug.Log(message, context);
 			return;
 		}
-
+		
 		if (message is string format)
 		{
 			Debug.LogFormat(format, args);
